@@ -15,7 +15,14 @@ public class WebUtil {
 		Integer.parseInt( s ) : 
 		value;
 	}
-	
+
+	public static long checkLongParam( String s, long value ) {
+		return 
+		( s != null && s.matches("\\d*\\.?\\d+") ) ? 
+		Long.parseLong( s ) : 
+		value;
+	}
+
 	public static void forward (
 		HttpServletRequest request,
 		HttpServletResponse response,

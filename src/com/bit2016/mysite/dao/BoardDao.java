@@ -25,6 +25,36 @@ public class BoardDao {
 		return conn;
 	}
 	
+	public void delete( Long no, Long userNo ) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = getConnection();
+			
+			String sql = "delete from board where no = ? and users_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, no);
+			pstmt.setLong(2, userNo);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println( "error:" + e );
+		} finally {
+			try {
+				if( pstmt != null ) {
+					pstmt.close();
+				}
+				if( conn != null ) {
+					conn.close();
+				}
+			} catch ( SQLException e ) {
+				System.out.println( "error:" + e );
+			}  
+		}
+	}
+	
 	public int getTotalCount() {
 		int totalCount = 0;
 

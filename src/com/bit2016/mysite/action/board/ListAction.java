@@ -21,10 +21,15 @@ public class ListAction implements Action {
 		int page = WebUtil.checkIntParam( request.getParameter( "p" ), 1 );
 		
 		BoardDao dao = new BoardDao();
+
+		int totalCount = dao.getTotalCount(); 
+		int pageCount = (int)Math.ceil( totalCount / LIST_SIZE );
+		if( page > pageCount ) {
+			page = 1;
+		}
 		
 		List<BoardVo> list = dao.getList( page, LIST_SIZE );
 
-		int totalCount = dao.getTotalCount(); 
 
 		
 		request.setAttribute( "list", list );

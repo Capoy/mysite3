@@ -46,7 +46,16 @@
 							<td>${vo.userName }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
-							<td><a href="" class="del">삭제</a></td>
+							<td>
+								<c:choose>
+									<c:when test="${not empty authUser && authUser.no == vo.userNo }">
+										<a href="${pageContext.request.contextPath }/board?a=delete&no=${vo.no }&p=${currentPage }" class="del">삭제</a>
+									</c:when>
+									<c:otherwise>
+										&nbsp;
+									</c:otherwise>
+								</c:choose>
+							</td>
 						</tr>
 					</c:forEach>
 				</table>
