@@ -86,8 +86,8 @@
 						<li><a href="">1</a></li>
 						<li><a href="">2</a></li>
 						<li class="selected">3</li>
-						<li><a href="">4</a></li>
-						<li><a href="">5</a></li>
+						<li>4</li>
+						<li>5</li>
 						<li><a href="">▶</a></li>
 					</ul>
 				</div>				

@@ -132,7 +132,7 @@ a.del	{
 	display:block;
 	width:20px;
 	height:20px; 
-	background:url("/mysite/assets/images/recycle.png") no-repeat 0 0;
+	background:url("/mysite3/assets/images/recycle.png") no-repeat 0 0;
 	font-size:0;
 }
 
@@ -147,7 +147,7 @@ div.pager  ul {
 	height:20px;
 	margin:10px auto;
 }
-div.pager  ul li 			{ display:inline-block; margin:5px 0; width:20px ; font-weight:bold; }
+div.pager  ul li 			{ color:#ddd; display:inline-block; margin:5px 0; width:20px ; font-weight:bold; }
 div.pager  ul li.selected	{ font-size:16px; text-decoration: underline; color:#f40808 }
 div.pager  ul li a,
 div.pager  ul li a:visited,
