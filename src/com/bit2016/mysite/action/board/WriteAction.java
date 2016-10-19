@@ -7,11 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.bit2016.mysite.dao.BoardDao;
+import com.bit2016.mysite.vo.BoardVo;
 import com.bit2016.mysite.vo.UserVo;
 import com.bit2016.web.Action;
 import com.bit2016.web.util.WebUtil;
 
-public class WriteFormAction implements Action {
+public class WriteAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -25,12 +27,22 @@ public class WriteFormAction implements Action {
 		if( authUser == null ) {
 			WebUtil.redirect(request, response, "/mysite3/board" );
 			return;
-		}	
-
-		WebUtil.forward(
+		}
+		
+		String title = request.getParameter( "title" );
+		String content = request.getParameter( "content" );
+		
+		BoardVo vo = new BoardVo();
+		vo.setTitle(title);
+		vo.setContent(content);
+		vo.setUserNo( authUser.getNo() );
+		
+		new BoardDao().insert(vo);
+		
+		WebUtil.redirect(
 			request, 
-			response, 
-			"/WEB-INF/views/board/write.jsp" );
+			response,
+			"/mysite3/board");
 	}
 
 }
