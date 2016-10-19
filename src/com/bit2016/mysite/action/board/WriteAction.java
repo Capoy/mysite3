@@ -31,13 +31,31 @@ public class WriteAction implements Action {
 		
 		String title = request.getParameter( "title" );
 		String content = request.getParameter( "content" );
+		String gno = request.getParameter( "gno" );
+		String ono = request.getParameter( "ono" );
+		String d = request.getParameter( "d" );
 		
+		BoardDao dao = new BoardDao();
 		BoardVo vo = new BoardVo();
+		
 		vo.setTitle(title);
 		vo.setContent(content);
 		vo.setUserNo( authUser.getNo() );
 		
-		new BoardDao().insert(vo);
+		if( gno != null ) {
+			int groupNo = Integer.parseInt( gno );
+			int orderNo = Integer.parseInt( ono );
+			int depth = Integer.parseInt( d );
+			
+			// 같은 그룹의 orderNo 보다 큰 글 들의 order_no 1씩 증가
+			dao.increaseGroupOrder( groupNo, orderNo );
+			
+			vo.setGroupNo(groupNo);
+			vo.setOrderNo(orderNo+1);
+			vo.setDepth(depth+1);
+		}
+		
+		dao.insert(vo);
 		
 		WebUtil.redirect(
 			request, 

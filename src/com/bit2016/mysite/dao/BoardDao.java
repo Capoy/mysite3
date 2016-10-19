@@ -213,6 +213,36 @@ public class BoardDao {
 		return list;
 	}
 	
+	public void increaseGroupOrder( Integer groupNo, Integer orderNo ){
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = getConnection();
+			
+			String sql = "update board set order_no = order_no + 1 where group_no = ? and order_no > ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, groupNo );
+			pstmt.setInt(2, orderNo );
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println( "error:" + e );
+		} finally {
+			try {
+				if( pstmt != null ) {
+					pstmt.close();
+				}
+				if( conn != null ) {
+					conn.close();
+				}
+			} catch ( SQLException e ) {
+				System.out.println( "error:" + e );
+			}  
+		}
+	}
+	
 	public void updateHit( Long boardNo ) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
