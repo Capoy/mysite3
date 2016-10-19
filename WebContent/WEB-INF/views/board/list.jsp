@@ -34,12 +34,12 @@
 								<c:when test="${vo.depth > 0 }">
 									<td class="left" style="padding-left:${20*vo.depth }px">
 										<img src="${pageContext.request.contextPath }/assets/images/reply.png">
-										<a href="">${vo.title }</a>
+										<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no }&p=${currentPage }">${vo.title }</a>
 									</td>
 								</c:when>
 								<c:otherwise>
 									<td class="left">
-										<a href="">${vo.title }</a>
+										<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no }&p=${currentPage }">${vo.title }</a>
 									</td>
 								</c:otherwise>
 							</c:choose>

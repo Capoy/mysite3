@@ -76,7 +76,7 @@ public class BoardDao {
 		}
 	}
 	
-	public void delete( Long no, Long userNo ) {
+	public void delete( Long boardNo, Long userNo ) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
@@ -86,8 +86,8 @@ public class BoardDao {
 			String sql = "delete from board where no = ? and users_no = ?";
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setLong(1, no);
-			pstmt.setLong(2, userNo);
+			pstmt.setLong( 1, boardNo );
+			pstmt.setLong( 2, userNo );
 			
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -212,4 +212,90 @@ public class BoardDao {
 		
 		return list;
 	}
+	
+	public void updateHit( Long boardNo ) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = getConnection();
+			
+			String sql = "update board set hit = hit + 1 where no = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, boardNo);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println( "error:" + e );
+		} finally {
+			try {
+				if( pstmt != null ) {
+					pstmt.close();
+				}
+				if( conn != null ) {
+					conn.close();
+				}
+			} catch ( SQLException e ) {
+				System.out.println( "error:" + e );
+			}  
+		}
+	}	
+	
+	public BoardVo get( Long boardNo ) {
+		BoardVo vo = null;
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+			
+			String sql = 
+				" select no, title, content, group_no, order_no, depth" +
+				"   from board" +
+				"  where no = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong( 1, boardNo );
+			rs = pstmt.executeQuery();
+			
+			while( rs.next() ) {
+				long no = rs.getLong( 1 );
+				String title = rs.getString( 2 );
+				String content = rs.getString( 3 );
+				int groupNo = rs.getInt( 4 );
+				int orderNo = rs.getInt( 5 );
+				int depth = rs.getInt( 6 );
+				
+				vo = new BoardVo();
+				vo.setNo(no);
+				vo.setTitle(title);
+				vo.setContent(content);
+				vo.setGroupNo(groupNo);
+				vo.setOrderNo(orderNo);
+				vo.setDepth(depth);
+				
+			}
+		} catch (SQLException e) {
+			System.out.println( "error:" + e );
+		} finally {
+			try {
+				if( rs != null ) {
+					rs.close();
+				}
+				if( pstmt != null ) {
+					pstmt.close();
+				}
+				if( conn != null ) {
+					conn.close();
+				}
+			} catch ( SQLException e ) {
+				System.out.println( "error:" + e );
+			}  
+		}
+		
+		return vo;
+	}	
 }
