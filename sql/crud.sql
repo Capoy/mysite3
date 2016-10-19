@@ -28,19 +28,20 @@ select count(*) from board;
 
 select *
 from
-(select rownum as rn, no, title, hit, reg_date, name, users_no
+(select no, title, hit, reg_date, depth, name, users_no, rownum as rn 
    from(  select a.no,
                  a.title, 
 	             a.hit, 
 	             to_char(a.reg_date, 'yyyy-mm-dd hh:mi:ss') as reg_date, 
   	             b.name,
-				 a.users_no 
+				 a.users_no,
+				 a.depth 
             from board a, users b
            where a.users_no = b.no
       --     and title like '%kwd%' or content like '%kwd%'
         order by group_no desc, order_no asc ))
-where (2-1)*5+1 <= rn  -- current page:1, page_size:2
-  and rn <= 2*5;               
+where (1-1)*5+1 <= rn  -- current page:1, page_size:2
+  and rn <= 1*5;               
 
 
 
