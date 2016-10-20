@@ -34,7 +34,6 @@ public class LoginAction implements Action {
 		}
 		
 		// 로그인 성공 -> 인증처리
-		System.out.println(  "로그인 성공 -> 인증처리" );
 		// false or 빈 파라미터 -> jsessionid 와 연결된 session 객체가 없으면 null 리턴
 		// true -> jsessionid 와 연결된 session 객체가 없으면 만들어서 리턴
 		HttpSession session = request.getSession( true );
