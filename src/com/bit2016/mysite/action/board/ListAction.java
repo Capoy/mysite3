@@ -13,31 +13,53 @@ import com.bit2016.web.Action;
 import com.bit2016.web.util.WebUtil;
 					
 public class ListAction implements Action {
-	private static final int LIST_SIZE = 5;
-	private static final int PAGE_SIZE = 5;
+	private static final int LIST_SIZE = 5; //리스팅되는 게시물의 수
+	private static final int PAGE_SIZE = 5; //페이지 리스트의 페이지 수
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int page = WebUtil.checkIntParam( request.getParameter( "p" ), 1 );
-		
+		//1. 파라미터 page 가져오기
+		int currentPage = WebUtil.checkIntParam( request.getParameter( "p" ), 1 );
+
+		//2. dao 생성
 		BoardDao dao = new BoardDao();
 
+		//3. 페이징을 위한 기본 데이터 계산
 		int totalCount = dao.getTotalCount(); 
-		int pageCount = (int)Math.ceil( totalCount / LIST_SIZE );
-		if( page > pageCount ) {
-			page = 1;
+		int pageCount = (int)Math.ceil( (double)totalCount / LIST_SIZE );
+		int blockCount = (int)Math.ceil( (double)pageCount / PAGE_SIZE );
+		int currentBlock = (int)Math.ceil( (double)currentPage / PAGE_SIZE );
+		
+		//4. 파라미터 page 값  검증
+		if( currentPage < 1 ) {
+			currentPage = 1;
+			currentBlock = 1;
+		} else if( currentPage > pageCount ) {
+			currentPage = pageCount;
+			currentBlock = (int)Math.ceil( (double)currentPage / PAGE_SIZE );
 		}
 		
-		List<BoardVo> list = dao.getList( page, LIST_SIZE );
-
-
+		//5. view에서 페이지 리스트를 렌더링 하기위한 데이터 값 계산
+		int beginPage = currentBlock == 0 ? 1 : (currentBlock - 1)*PAGE_SIZE + 1;
+		int prevPage = ( currentBlock > 1 ) ? ( currentBlock - 1 ) * PAGE_SIZE : 0;
+		int nextPage = ( currentBlock < blockCount ) ? currentBlock * PAGE_SIZE + 1 : 0;
+		int endPage = ( nextPage > 0 ) ? ( beginPage - 1 ) + LIST_SIZE : pageCount;
 		
+		//6. 리스트 가져오기
+		List<BoardVo> list = dao.getList( currentPage, LIST_SIZE );
+
+		//7. request 범위에 저장
 		request.setAttribute( "list", list );
 		
 		request.setAttribute( "totalCount", totalCount );
-		request.setAttribute( "currentPage", page );
 		request.setAttribute( "listSize", LIST_SIZE );
+		request.setAttribute( "currentPage", currentPage );
+		request.setAttribute( "beginPage", beginPage );
+		request.setAttribute( "endPage", endPage );
+		request.setAttribute( "prevPage", prevPage );
+		request.setAttribute( "nextPage", nextPage );
 		
+		//8. 포워딩
 		WebUtil.forward(request, response, "/WEB-INF/views/board/list.jsp");
 	}
 }

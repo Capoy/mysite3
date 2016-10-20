@@ -61,13 +61,27 @@
 				</table>
 				<div class="pager">
 					<ul>
-						<li><a href="">◀</a></li>
-						<li><a href="">1</a></li>
-						<li><a href="">2</a></li>
-						<li class="selected">3</li>
-						<li>4</li>
-						<li>5</li>
-						<li><a href="">▶</a></li>
+						<c:if test="${prevPage > 0 }" >
+							<li><a href="${pageContext.request.contextPath }/board?p=${prevPage }">◀</a></li>
+						</c:if>
+						
+						<c:forEach begin="${beginPage }" end="${beginPage + listSize - 1 }" var="page">
+							<c:choose>
+								<c:when test="${endPage < page }">
+									<li>${page }</li>
+								</c:when> 
+								<c:when test="${currentPage == page }">
+									<li class="selected">${page }</li>
+								</c:when>
+								<c:otherwise> 
+									<li><a href="${pageContext.request.contextPath }/board?p=${page }">${page }</a></li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+						
+						<c:if test="${nextPage > 0 }" >
+							<li><a href="${pageContext.request.contextPath }/board?p=${nextPage }">▶</a></li>
+						</c:if>	
 					</ul>
 				</div>				
 				<div class="bottom">
