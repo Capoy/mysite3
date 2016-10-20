@@ -15,6 +15,8 @@ select no, name
  where email='kickscar@gmail.com'
    and password='1234';
 
+select * from users;
+
  
  
 -- board  

@@ -19,6 +19,7 @@
 					<input type="hidden" name="gno" value="${boardVo.groupNo }">
 					<input type="hidden" name="ono" value="${boardVo.orderNo }">
 					<input type="hidden" name="d" value="${boardVo.depth }">
+					<input type="hidden" name="kwd" value="${keyword }" />
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글쓰기</th>

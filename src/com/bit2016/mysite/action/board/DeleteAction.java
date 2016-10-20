@@ -1,6 +1,7 @@
 package com.bit2016.mysite.action.board;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ public class DeleteAction implements Action {
 		
 		long no = WebUtil.checkLongParam( request.getParameter( "no" ), 0L );
 		int page = WebUtil.checkIntParam( request.getParameter( "p" ), 1 ); 
+		String keyword = WebUtil.checkNullParam( request.getParameter( "kwd" ), "" );
 		long userNo = authUser.getNo();
 		
 		new BoardDao().delete( no, userNo );
@@ -37,6 +39,6 @@ public class DeleteAction implements Action {
 		WebUtil.redirect(
 			request, 
 			response, 
-			"/mysite3/board?a=list&p=" + page );
+			"/mysite3/board?p=" + page + "&kwd=" + URLEncoder.encode( keyword, "UTF-8" ) );
 	}
 }

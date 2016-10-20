@@ -14,8 +14,8 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="" method="post">
-					<input type="text" id="kwd" name="kwd" value="">
+				<form id="search_form" action="${pageContext.request.contextPath }/board" method="get">
+					<input type="text" id="kwd" name="kwd" value="${keyword }">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -34,12 +34,12 @@
 								<c:when test="${vo.depth > 0 }">
 									<td class="left" style="padding-left:${20*vo.depth }px">
 										<img src="${pageContext.request.contextPath }/assets/images/reply.png">
-										<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no }&p=${currentPage }">${vo.title }</a>
+										<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no }&p=${currentPage }&kwd=${keyword }">${vo.title }</a>
 									</td>
 								</c:when>
 								<c:otherwise>
 									<td class="left">
-										<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no }&p=${currentPage }">${vo.title }</a>
+										<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no }&p=${currentPage }&kwd=${keyword }">${vo.title }</a>
 									</td>
 								</c:otherwise>
 							</c:choose>
@@ -49,7 +49,7 @@
 							<td>
 								<c:choose>
 									<c:when test="${not empty authUser && authUser.no == vo.userNo }">
-										<a href="${pageContext.request.contextPath }/board?a=delete&no=${vo.no }&p=${currentPage }" class="del">삭제</a>
+										<a href="${pageContext.request.contextPath }/board?a=delete&no=${vo.no }&p=${currentPage }&kwd=${keyword }" class="del">삭제</a>
 									</c:when>
 									<c:otherwise>
 										&nbsp;
@@ -62,7 +62,7 @@
 				<div class="pager">
 					<ul>
 						<c:if test="${prevPage > 0 }" >
-							<li><a href="${pageContext.request.contextPath }/board?p=${prevPage }">◀</a></li>
+							<li><a href="${pageContext.request.contextPath }/board?p=${prevPage }&kwd=${keyword }">◀</a></li>
 						</c:if>
 						
 						<c:forEach begin="${beginPage }" end="${beginPage + listSize - 1 }" var="page">
@@ -74,13 +74,13 @@
 									<li class="selected">${page }</li>
 								</c:when>
 								<c:otherwise> 
-									<li><a href="${pageContext.request.contextPath }/board?p=${page }">${page }</a></li>
+									<li><a href="${pageContext.request.contextPath }/board?p=${page }&kwd=${keyword }">${page }</a></li>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
 						
 						<c:if test="${nextPage > 0 }" >
-							<li><a href="${pageContext.request.contextPath }/board?p=${nextPage }">▶</a></li>
+							<li><a href="${pageContext.request.contextPath }/board?p=${nextPage }&kwd=${keyword }">▶</a></li>
 						</c:if>	
 					</ul>
 				</div>				

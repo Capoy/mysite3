@@ -30,11 +30,14 @@ public class ReplyFormAction implements Action {
 		}
 		
 		long no = WebUtil.checkLongParam( request.getParameter( "no" ), 0L );
+		String keyword = WebUtil.checkNullParam( request.getParameter( "kwd" ), "" );
 		
 		BoardDao dao = new BoardDao();
 		BoardVo boardVo = dao.get( no );
 		
 		request.setAttribute( "boardVo", boardVo );
+		request.setAttribute( "keyword", keyword );
+		
 		WebUtil.forward(
 				request,
 				response,

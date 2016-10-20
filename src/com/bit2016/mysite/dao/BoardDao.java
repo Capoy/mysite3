@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,19 +105,29 @@ public class BoardDao {
 		}
 	}
 	
-	public int getTotalCount() {
+	public int getTotalCount( String keyword ) {
 		int totalCount = 0;
 
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
 		try {
 			conn = getConnection();
-			stmt = conn.createStatement();
-			
-			String sql = "select count(*) from board";
-			rs = stmt.executeQuery(sql);
+			if( "".equals( keyword ) ) {
+				String sql = "select count(*) from board";
+				pstmt = conn.prepareStatement(sql);
+			} else { 
+				String sql =
+					"select count(*)" +
+					"  from board" +
+					" where title like ? or content like ?";
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, "%" + keyword + "%");
+				pstmt.setString(2, "%" + keyword + "%");
+			}
+			rs = pstmt.executeQuery();
 			if( rs.next() ) {
 				totalCount = rs.getInt( 1 );
 			}
@@ -129,8 +138,8 @@ public class BoardDao {
 				if( rs != null ) {
 					rs.close();
 				}
-				if( stmt != null ) {
-					stmt.close();
+				if( pstmt != null ) {
+					pstmt.close();
 				}
 				if( conn != null ) {
 					conn.close();
@@ -143,7 +152,7 @@ public class BoardDao {
 		return totalCount;
 	}
 	
-	public List<BoardVo> getList( Integer page, Integer size ) {
+	public List<BoardVo> getList( String keyword, Integer page, Integer size ) {
 		
 		List<BoardVo> list = new ArrayList<BoardVo>();
 		
@@ -154,21 +163,40 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 			
-			String sql = 
-				" select * " +
-				"   from ( select no, title, hit, reg_date, depth, name, users_no, rownum as rn" +
-				"            from(  select a.no, a.title, a.hit, to_char(a.reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date, a.depth, b.name, a.users_no" +
-				"                     from board a, users b" +
-				"                    where a.users_no = b.no" +
-// and title like '%kwd%' or content like '%kwd%'
-                "                 order by group_no desc, order_no asc ))" +
-                "  where (?-1)*?+1 <= rn and rn <= ?*?";
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setInt( 1, page );
-			pstmt.setInt( 2, size );
-			pstmt.setInt( 3, page );
-			pstmt.setInt( 4, size );
+			if( "".equals( keyword ) ) {
+				String sql = 
+					" select * " +
+					"   from ( select no, title, hit, reg_date, depth, name, users_no, rownum as rn" +
+					"            from(  select a.no, a.title, a.hit, to_char(a.reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date, a.depth, b.name, a.users_no" +
+					"                     from board a, users b" +
+					"                    where a.users_no = b.no" +
+	                "                 order by group_no desc, order_no asc ))" +
+	                "  where (?-1)*?+1 <= rn and rn <= ?*?";
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setInt( 1, page );
+				pstmt.setInt( 2, size );
+				pstmt.setInt( 3, page );
+				pstmt.setInt( 4, size );
+			} else {
+				String sql = 
+					" select * " +
+					"   from ( select no, title, hit, reg_date, depth, name, users_no, rownum as rn" +
+					"            from(  select a.no, a.title, a.hit, to_char(a.reg_date, 'yyyy-mm-dd hh24:mi:ss') as reg_date, a.depth, b.name, a.users_no" +
+					"                     from board a, users b" +
+					"                    where a.users_no = b.no" +
+					"                      and (title like ? or content like ?)" + 
+					"                 order by group_no desc, order_no asc ))" +
+					"  where (?-1)*?+1 <= rn and rn <= ?*?";
+				pstmt = conn.prepareStatement(sql);
+
+				pstmt.setString( 1, "%" + keyword + "%" );
+				pstmt.setString( 2, "%" + keyword + "%" );
+				pstmt.setInt( 3, page );
+				pstmt.setInt( 4, size );
+				pstmt.setInt( 5, page );
+				pstmt.setInt( 6, size );
+			}
 			
 			rs = pstmt.executeQuery();
 			
@@ -192,6 +220,7 @@ public class BoardDao {
 				
 				list.add( vo );
 			}
+			
 		} catch (SQLException e) {
 			System.out.println( "error:" + e );
 		} finally {

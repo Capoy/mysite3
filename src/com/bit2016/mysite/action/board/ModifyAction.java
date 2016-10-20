@@ -1,6 +1,7 @@
 package com.bit2016.mysite.action.board;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ public class ModifyAction implements Action {
 		long no = WebUtil.checkLongParam(request.getParameter("no"), 0L);
 		String title = WebUtil.checkNullParam(request.getParameter("title"), "");
 		String content = WebUtil.checkNullParam(request.getParameter("content"), "");
+		String keyword = WebUtil.checkNullParam( request.getParameter( "kwd" ), "" );
 
 		BoardVo vo = new BoardVo();
 		vo.setNo(no);
@@ -41,6 +43,9 @@ public class ModifyAction implements Action {
 
 		new BoardDao().update(vo);
 
-		WebUtil.redirect(request, response, "/mysite3/board?a=view&no=" + no);
+		WebUtil.redirect(
+			request,
+			response, 
+			"/mysite3/board?a=view&no=" + no + "&kwd=" + URLEncoder.encode( keyword, "UTF-8" ) );
 	}
 }

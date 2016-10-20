@@ -33,11 +33,11 @@
 					</tr>
 				</table>
 				<div class="bottom">
-					<a href="${pageContext.request.contextPath }/board?p=${page }">글목록</a>
+					<a href="${pageContext.request.contextPath }/board?p=${page }&kwd=${keyword }">글목록</a>
 					<c:if test="${ not empty authUser }">
-						<a href="${pageContext.request.contextPath }/board?a=replyform&no=${boardVo.no }">답글 달기</a>
+						<a href="${pageContext.request.contextPath }/board?a=replyform&no=${boardVo.no }&kwd=${keyword }">답글 달기</a>
 						<c:if test="${authUser.no == boardVo.userNo }">
-							<a href="${pageContext.request.contextPath }/board?a=modifyform&no=${boardVo.no }">글수정</a>
+							<a href="${pageContext.request.contextPath }/board?a=modifyform&no=${boardVo.no }&kwd=${keyword }">글수정</a>
 						</c:if>
 					</c:if>
 				</div>

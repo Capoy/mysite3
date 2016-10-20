@@ -18,14 +18,16 @@ public class ListAction implements Action {
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//1. 파라미터 page 가져오기
+		//1-1. 파라미터 page 가져오기
 		int currentPage = WebUtil.checkIntParam( request.getParameter( "p" ), 1 );
+		//1-2. 파라미터 kwd 가져오기
+		String keyword = WebUtil.checkNullParam( request.getParameter( "kwd" ), "" );
 
 		//2. dao 생성
 		BoardDao dao = new BoardDao();
 
 		//3. 페이징을 위한 기본 데이터 계산
-		int totalCount = dao.getTotalCount(); 
+		int totalCount = dao.getTotalCount( keyword ); 
 		int pageCount = (int)Math.ceil( (double)totalCount / LIST_SIZE );
 		int blockCount = (int)Math.ceil( (double)pageCount / PAGE_SIZE );
 		int currentBlock = (int)Math.ceil( (double)currentPage / PAGE_SIZE );
@@ -46,7 +48,7 @@ public class ListAction implements Action {
 		int endPage = ( nextPage > 0 ) ? ( beginPage - 1 ) + LIST_SIZE : pageCount;
 		
 		//6. 리스트 가져오기
-		List<BoardVo> list = dao.getList( currentPage, LIST_SIZE );
+		List<BoardVo> list = dao.getList( keyword, currentPage, LIST_SIZE );
 
 		//7. request 범위에 저장
 		request.setAttribute( "list", list );
@@ -58,6 +60,7 @@ public class ListAction implements Action {
 		request.setAttribute( "endPage", endPage );
 		request.setAttribute( "prevPage", prevPage );
 		request.setAttribute( "nextPage", nextPage );
+		request.setAttribute( "keyword", keyword );
 		
 		//8. 포워딩
 		WebUtil.forward(request, response, "/WEB-INF/views/board/list.jsp");

@@ -1,6 +1,7 @@
 package com.bit2016.mysite.action.board;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,11 +30,17 @@ public class WriteAction implements Action {
 			return;
 		}
 		
-		String title = request.getParameter( "title" );
-		String content = request.getParameter( "content" );
+		String title = WebUtil.checkNullParam( request.getParameter( "title" ), "" );
+		String content = WebUtil.checkNullParam( request.getParameter( "content" ), "" );
+		String keyword = WebUtil.checkNullParam( request.getParameter( "kwd" ), "" );
 		String gno = request.getParameter( "gno" );
 		String ono = request.getParameter( "ono" );
 		String d = request.getParameter( "d" );
+
+		if( "".equals( title ) || "".equals( title ) ) {
+			WebUtil.redirect(request, response, "/mysite3/board" );
+			return;			
+		}
 		
 		BoardDao dao = new BoardDao();
 		BoardVo vo = new BoardVo();
@@ -60,7 +67,7 @@ public class WriteAction implements Action {
 		WebUtil.redirect(
 			request, 
 			response,
-			"/mysite3/board" );
+			"/mysite3/board?kwd=" + URLEncoder.encode( keyword, "UTF-8" ) );
 	}
 
 }
