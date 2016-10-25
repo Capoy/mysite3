@@ -5,6 +5,9 @@
 #guestbook h1		{
 	color: #5C5C5C;
 	margin-bottom:10px;
+	background:url('/mysite3/assets/images/guestbook.png') 0 0 no-repeat;
+	background-size: 35px;
+	padding-left:40px;
 }
 #guestbook form { width:100% }
 #guestbook form input[type="text"],
