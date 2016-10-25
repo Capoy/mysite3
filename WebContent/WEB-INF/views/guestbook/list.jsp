@@ -2,9 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%> 
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%
-	pageContext.setAttribute( "newLine", "\n" );
-%>
+<%pageContext.setAttribute( "newLine", "\n" );%>
 <!doctype html>
 <html>
 <head>
@@ -17,18 +15,35 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="guestbook">
+				<h1>방명록</h1>
 				<form action="${pageContext.request.contextPath }/guestbook" method="post">
 					<input type="hidden" name="a" value="add">
 					<table>
 						<tr>
-							<td>이름</td><td><input type="text" name="name"></td>
-							<td>비밀번호</td><td><input type="password" name="pass"></td>
+							<td>
+								<input 
+									type="text"
+									name="name"
+									placeholder="이름">
+							</td>
 						</tr>
 						<tr>
-							<td colspan=4><textarea name="content" id="content"></textarea></td>
+							<td>
+								<input
+									type="password"
+									name="pass"
+									placeholder="비밀번호">
+							</td>
 						</tr>
 						<tr>
-							<td colspan=4 align=right><input type="submit" VALUE=" 확인 "></td>
+							<td>
+								<textarea name="content" placeholder="내용을 입력해 주세요."></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="submit" value="보내기" />
+							</td>
 						</tr>
 					</table>
 				</form>
@@ -36,20 +51,12 @@
 					<c:set var="count" value="${fn:length(list) }"/>
 					<c:forEach items="${list }" var="vo" varStatus="status">
 						<li>
-							<table>
-								<tr>
-									<td>[${count - status.index }]</td>
-									<td>${vo.name }</td>
-									<td>${vo.regDate }</td>
-									<td><a href="${pageContext.request.contextPath }/guestbook?a=deleteform&no=${vo.no }">삭제</a></td>
-								</tr>
-								<tr>
-									<td colspan=4>
-									${fn:replace(vo.content, newLine, "<br>" ) }	
-									</td>
-								</tr>
-							</table>
-							<br>
+							<strong>${vo.name }</strong>
+							<p>
+								${fn:replace(vo.content, newLine, "<br>" ) }
+							</p>
+							<strong>${vo.regDate }</strong>
+							<a href="${pageContext.request.contextPath }/guestbook?a=deleteform&no=${vo.no }" title="삭제">삭제</a>
 						</li>
 					</c:forEach>
 				</ul>
