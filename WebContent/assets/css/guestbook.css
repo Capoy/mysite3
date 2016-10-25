@@ -6,13 +6,7 @@
 	color: #5C5C5C;
 	margin-bottom:10px;
 }
-#guestbook form,
-#guestbook table	{ width:540px }
-#guestbook table	{ border-collapse: collapse }
-
-#guestbook form table	 	{ border:none }
-#guestbook form table td	{ text-align:center; border:none }
-#guestbook form table td	{ padding:0 }
+#guestbook form { width:100% }
 #guestbook form input[type="text"],
 #guestbook form input[type="password"],
 #guestbook form textarea {

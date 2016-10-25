@@ -18,34 +18,10 @@
 				<h1>방명록</h1>
 				<form action="${pageContext.request.contextPath }/guestbook" method="post">
 					<input type="hidden" name="a" value="add">
-					<table>
-						<tr>
-							<td>
-								<input 
-									type="text"
-									name="name"
-									placeholder="이름">
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<input
-									type="password"
-									name="pass"
-									placeholder="비밀번호">
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<textarea name="content" placeholder="내용을 입력해 주세요."></textarea>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<input type="submit" value="보내기" />
-							</td>
-						</tr>
-					</table>
+					<input type="text" name="name" placeholder="이름">
+					<input type="password" name="pass" placeholder="비밀번호">
+					<textarea name="content" placeholder="내용을 입력해 주세요."></textarea>
+					<input type="submit" value="보내기" />
 				</form>
 				<ul>
 					<c:set var="count" value="${fn:length(list) }"/>
