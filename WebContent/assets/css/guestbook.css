@@ -82,6 +82,7 @@
 	background:url('/mysite3/assets/images/delete.png') 0 0 no-repeat;
 	left:20px;
 	top:40px;
+	outline:none;
 }
 
 #guestbook.delete-form	{ height:200px }
